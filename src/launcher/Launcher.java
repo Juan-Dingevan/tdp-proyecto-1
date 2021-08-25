@@ -9,7 +9,14 @@ public class Launcher {
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-            	Student s = new Student(12345, "Dingevan", "Juan Ignacio", "jidingevan@gmail.com", "url", "path");
+            	Integer lu = 130683;
+            	String apellido = "Dingevan";
+            	String nombre = "Juan Ignacio";
+            	String email = "jidingevan@gmail.com";
+            	String url = "https://github.com/Juan-Dingevan/tdp-proyecto-1";
+            	String path = "/images/me.jpg";
+            	
+            	Student s = new Student(lu, apellido, nombre, email, url, path);
             	SimplePresentationScreen screen = new SimplePresentationScreen(s);
             }
         });
