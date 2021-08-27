@@ -4,7 +4,6 @@ import entities.Student;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,29 +16,19 @@ import java.awt.Toolkit;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
 
 
 @SuppressWarnings("serial")
 public class SimplePresentationScreen extends JFrame {
+	//Atributos de instancia
 	private Student studentData;
+	private String lu;
 	
 	private DateTimeFormatter formateadorDeFecha;
 	private DateTimeFormatter formateadorDeHora;
 	private String fechaHora;
-	
-	private boolean modoClaro;
-	
-	private static final Color defaultBackground = Color.decode("#f0f0f0");
-	private static final Color defaultForeground = Color.decode("#000000");
-	private static final Color defaultTextFieldBackground = Color.WHITE;
-	
-	private static final Color darkThemeBackground = Color.decode("#272727");
-	private static final Color darkThemeForeground = Color.decode("#d6d6d6");
-	private static final Color darkThemeTextFieldBackground = Color.decode("#1f1f1f");
-	
+	private LocalDateTime momentoActual;
 	
 	private JPanel contentPane;
 	private JPanel tabInformation;
@@ -61,14 +50,11 @@ public class SimplePresentationScreen extends JFrame {
 	private JLabel lblImageLabel;
 	private ImageIcon img;
 	
-	private JButton btnCambioDeModo;
-	
 	private JPanel panelFecha;
 	private JLabel lblFecha;
 	
 	public SimplePresentationScreen(Student studentData) {
 		this.studentData = studentData;
-		modoClaro = true;
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -131,9 +117,8 @@ public class SimplePresentationScreen extends JFrame {
 		txtfLU.setColumns(10);
 		txtfLU.setBounds(105, 9, 280, 20);
 		
-		String lu = "Error!";
-		Integer legado = studentData.getId();
-		lu = legado.toString();
+		lu = "Error!"; //Inicializamos con un mensaje de error por si el LU del estudiante no es valido.
+		lu = ((Integer) studentData.getId()).toString();
 		
 		txtfLU.setText(lu);
 		tabInformation.add(txtfLU);
@@ -169,7 +154,7 @@ public class SimplePresentationScreen extends JFrame {
 		contentPane.add(tabbedPane);
 		
 		panelContenedorDeImagen = new JPanel();
-		panelContenedorDeImagen.setBounds(445, 11, 150, 150);
+		panelContenedorDeImagen.setBounds(445, 30, 150, 150);
 		contentPane.add(panelContenedorDeImagen);
 		
 		/**DISPLAY DE LA FOTO:
@@ -183,20 +168,13 @@ public class SimplePresentationScreen extends JFrame {
 		
 		img = new ImageIcon(SimplePresentationScreen.class.getResource(studentData.getPathPhoto()));
 		img = new ImageIcon(img.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
+		panelContenedorDeImagen.setLayout(new BorderLayout(0, 0));
 		lblImageLabel.setIcon(img);
 		
 		lblImageLabel.setBounds(604, 5, 0, 211);
 		panelContenedorDeImagen.add(lblImageLabel);
 		
-		btnCambioDeModo = new JButton("Modo Oscuro");
-		btnCambioDeModo.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnCambioDeModo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cambiarModo();
-			}
-		});
-		btnCambioDeModo.setBounds(445, 165, 150, 20);
-		contentPane.add(btnCambioDeModo);
+		/**Fin del display de la foto**/
 		
 		panelFecha = new JPanel();
 		panelFecha.setBounds(5, 190, 430, 20);
@@ -215,111 +193,15 @@ public class SimplePresentationScreen extends JFrame {
 		
 		formateadorDeFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		formateadorDeHora = DateTimeFormatter.ofPattern("HH:mm:ss");
-		LocalDateTime now = LocalDateTime.now();
-		fechaHora = "Esta ventana fue generada el " + formateadorDeFecha.format(now) + " a las: " + formateadorDeHora.format(now); 
+		momentoActual = LocalDateTime.now();
+		fechaHora = "Esta ventana fue generada el " + formateadorDeFecha.format(momentoActual) + " a las: " + formateadorDeHora.format(momentoActual); 
 		
 		lblFecha.setText(fechaHora);
 		
 		lblFecha.setBounds(3, 3, 417, 15);
 		lblFecha.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panelFecha.add(lblFecha);
-	}
-	
-	private void cambiarModo() {
-		if(modoClaro){
-			ponerModoOscuro();
-		} else {
-			ponerModoClaro();
-		}
-	}
-	
-	private void ponerModoOscuro() {
-		modoClaro = false;
 		
-		//Background
-		contentPane.setBackground(darkThemeBackground);
-		
-		//Tabed Pane
-		tabbedPane.setBackground(darkThemeBackground);
-		
-		//Informacion del alumno
-		tabInformation.setBackground(darkThemeBackground);
-		tabInformation.setForeground(darkThemeForeground);
-		
-		//Informacion del alumno: labels
-		lblLegado.setForeground(darkThemeForeground);
-		lblApellido.setForeground(darkThemeForeground);
-		lblNombre.setForeground(darkThemeForeground);
-		lblEmail.setForeground(darkThemeForeground);
-		lblGithubUrl.setForeground(darkThemeForeground);
-		
-		//Informacion del alumno: text fields
-		txtfLU.setBackground(darkThemeTextFieldBackground);
-		txtfLU.setForeground(darkThemeForeground);
-		txtfApellido.setBackground(darkThemeTextFieldBackground);
-		txtfApellido.setForeground(darkThemeForeground);
-		txtfNombre.setBackground(darkThemeTextFieldBackground);
-		txtfNombre.setForeground(darkThemeForeground);
-		txtfEmail.setBackground(darkThemeTextFieldBackground);
-		txtfEmail.setForeground(darkThemeForeground);
-		txtfGithubUrl.setBackground(darkThemeTextFieldBackground);
-		txtfGithubUrl.setForeground(darkThemeForeground);
-		
-		//Imagen
-		panelContenedorDeImagen.setBackground(darkThemeBackground);
-		
-		//Fecha
-		panelFecha.setBackground(darkThemeBackground);
-		lblFecha.setForeground(darkThemeForeground);
-		
-		//Boton
-		btnCambioDeModo.setText("Modo Claro");
-		btnCambioDeModo.setBackground(darkThemeBackground);
-		btnCambioDeModo.setForeground(darkThemeForeground);
-	}
-	
-	private void ponerModoClaro() {
-		modoClaro = true;
-		
-		//Background
-		contentPane.setBackground(defaultBackground);
-		
-		//Tabed Pane
-		tabbedPane.setBackground(defaultBackground);
-		
-		//Informacion del alumno
-		tabInformation.setBackground(defaultBackground);
-		tabInformation.setForeground(defaultForeground);
-		
-		//Informacion del alumno: labels
-		lblLegado.setForeground(defaultForeground);
-		lblApellido.setForeground(defaultForeground);
-		lblNombre.setForeground(defaultForeground);
-		lblEmail.setForeground(defaultForeground);
-		lblGithubUrl.setForeground(defaultForeground);
-		
-		//Informacion del alumno: text fields
-		txtfLU.setBackground(defaultTextFieldBackground);
-		txtfLU.setForeground(defaultForeground);
-		txtfApellido.setBackground(defaultTextFieldBackground);
-		txtfApellido.setForeground(defaultForeground);
-		txtfNombre.setBackground(defaultTextFieldBackground);
-		txtfNombre.setForeground(defaultForeground);
-		txtfEmail.setBackground(defaultTextFieldBackground);
-		txtfEmail.setForeground(defaultForeground);
-		txtfGithubUrl.setBackground(defaultTextFieldBackground);
-		txtfGithubUrl.setForeground(defaultForeground);
-		
-		//Imagen
-		panelContenedorDeImagen.setBackground(defaultBackground);
-		
-		//Fecha
-		panelFecha.setBackground(defaultBackground);
-		lblFecha.setForeground(defaultForeground);
-		
-		//Boton
-		btnCambioDeModo.setText("Modo Oscuro");
-		btnCambioDeModo.setBackground(defaultBackground);
-		btnCambioDeModo.setForeground(defaultForeground);
+		/**Fin del manejo de fecha y hora**/
 	}
 }

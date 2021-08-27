@@ -16,8 +16,11 @@ public class Launcher {
             	String url = "https://github.com/Juan-Dingevan/tdp-proyecto-1";
             	String path = "/images/me.jpg";
             	
-            	Student s = new Student(lu, apellido, nombre, email, url, path);
-            	SimplePresentationScreen screen = new SimplePresentationScreen(s);
+            	Student estudianteAMostrar = new Student(lu, apellido, nombre, email, url, path);
+            	
+            	//Suprimimos la advertencia porque el unico metodo que nos interesa de SimplePresentationScreen es su constructor.
+            	@SuppressWarnings("unused")
+				SimplePresentationScreen screen = new SimplePresentationScreen(estudianteAMostrar);
             }
         });
     }
